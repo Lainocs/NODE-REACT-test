@@ -20,6 +20,6 @@ app.get('/*', (_, res) => {
     res.sendFile(path.join(__dirname, './client/build/index.html'))
 })
 
-app.listen(7000, () => {
-    console.log(`Server is running on port : ${PORT}`)
+app.listen(process.env.PORT || 7000, () => {
+    console.log(`Server is running`)
 })
