@@ -1,20 +1,26 @@
 const express = require('express')
+const dotenv = require('dotenv')
+const morgan = require('morgan')
+const bodyparser = require('body-parser')
 const path = require('path')
-require('dotenv').config()
+const http = require('http')
 
+const connectDB = require('./server/database/connexion')
+
+dotenv.config({ path: './.env' })
 const PORT = process.env.PORT || 7000
 
 const app = express()
 
-app.use(express.json())
-
 app.use(express.static('client/build'))
 
-app.get('/api/hello', (req, res) => { 
-    res.send({
-        msg: 'Bonjour Monsieur'
-    }) 
-})
+connectDB()
+
+app.use(bodyparser.urlencoded({ extended: true }))
+
+app.use(express.json())
+
+app.use('/', require('./server/routes/router'))
 
 app.get('/*', (_, res) => {
     res.sendFile(path.join(__dirname, './client/build/index.html'))
